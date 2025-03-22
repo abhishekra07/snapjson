@@ -8,36 +8,60 @@ import {
   IconButton,
   Paper,
 } from "@mui/material";
-import { ContentCopy, Download } from "@mui/icons-material";
+import { ContentCopy, Download, UploadFile } from "@mui/icons-material";
+import yaml from "js-yaml";
 
-const Formatter = () => {
+const JsonToYaml = () => {
   const [jsonInput, setJsonInput] = useState("");
-  const [formattedJson, setFormattedJson] = useState("");
+  const [yamlOutput, setYamlOutput] = useState("");
   const [error, setError] = useState("");
 
-  const handleFormatJson = () => {
+  const handleConvertToYaml = () => {
     try {
       const parsedJson = JSON.parse(jsonInput);
-      setFormattedJson(JSON.stringify(parsedJson, null, 2));
+      const convertedYaml = yaml.dump(parsedJson);
+      setYamlOutput(convertedYaml);
       setError("");
     } catch (err) {
       setError("Invalid JSON. Please check your input.");
-      setFormattedJson("");
+      setYamlOutput("");
     }
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(formattedJson);
+    navigator.clipboard.writeText(yamlOutput);
   };
 
-  const handleDownloadJson = () => {
-    const blob = new Blob([formattedJson], { type: "application/json" });
+  const handleDownloadYaml = () => {
+    const blob = new Blob([yamlOutput], { type: "text/yaml" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "formatted.json";
+    link.download = "converted.yaml";
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target.result;
+        const parsedJson = JSON.parse(content);
+        setJsonInput(content);
+        const convertedYaml = yaml.dump(parsedJson);
+        setYamlOutput(convertedYaml);
+        setError("");
+      } catch (err) {
+        setError("Invalid JSON file.");
+        setJsonInput("");
+        setFormattedJson("");
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -65,7 +89,7 @@ const Formatter = () => {
               <TextField
                 fullWidth
                 multiline
-                minRows={8}
+                minRows={15}
                 placeholder="Enter JSON here..."
                 variant="outlined"
                 value={jsonInput}
@@ -78,28 +102,49 @@ const Formatter = () => {
           </Paper>
         </Grid>
 
-        {/* Middle Section - Format Button */}
+        {/* Middle Section - Convert Button */}
         <Grid
           item
           xs={2}
           sx={{
             textAlign: "center",
+            flexDirection: "column",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<UploadFile />}
+            >
+              Upload JSON
+              <input
+                type="file"
+                accept=".json,.txt"
+                hidden
+                onChange={handleFileUpload}
+              />
+            </Button>
+          </Box>
           <Button
             variant="contained"
             color="primary"
-            onClick={handleFormatJson}
+            onClick={handleConvertToYaml}
             sx={{ height: "50px", width: "100%" }}
           >
-            Format JSON
+            Convert to YAML
           </Button>
         </Grid>
 
-        {/* Right Section - Formatted JSON Output */}
+        {/* Right Section - YAML Output */}
         <Grid item xs={5} sx={{ height: "100%" }}>
           <Paper
             elevation={3}
@@ -111,12 +156,12 @@ const Formatter = () => {
             }}
           >
             <Box display="flex" justifyContent="space-between">
-              <Typography variant="h6">Formatted JSON</Typography>
+              <Typography variant="h6">YAML Output</Typography>
               <Box>
                 <IconButton onClick={handleCopyToClipboard}>
                   <ContentCopy />
                 </IconButton>
-                <IconButton onClick={handleDownloadJson}>
+                <IconButton onClick={handleDownloadYaml}>
                   <Download />
                 </IconButton>
               </Box>
@@ -131,10 +176,10 @@ const Formatter = () => {
               <TextField
                 fullWidth
                 multiline
-                minRows={12}
-                placeholder="Formatted JSON will appear here..."
+                minRows={15}
+                placeholder="Converted YAML will appear here..."
                 variant="outlined"
-                value={formattedJson}
+                value={yamlOutput}
                 InputProps={{ readOnly: true }}
                 sx={{ border: "none", outline: "none" }}
               />
@@ -146,4 +191,4 @@ const Formatter = () => {
   );
 };
 
-export default Formatter;
+export default JsonToYaml;

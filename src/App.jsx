@@ -11,6 +11,7 @@ import {
 import { ThemeProviderWrapper } from "./context/ThemeContext";
 import MobileWarning from "./components/MobileWarning";
 import Footer from "./components/Footer";
+import FAQ from "./components/FAQ";
 
 const theme = createTheme({
   palette: {
@@ -24,9 +25,11 @@ const App = () => {
       <Router>
         <MobileWarning />
         <Navbar />
-        <Container>
-          <AppRouter />
-        </Container>
+        {/* <Container> */}
+        <AppRouter />
+        {/* </Container> */}
+        {/* FAQ Section */}
+        <FAQ />
         <Footer />
       </Router>
     </ThemeProviderWrapper>

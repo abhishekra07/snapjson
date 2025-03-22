@@ -18,4 +18,22 @@ export const getTheme = (mode) =>
         primary: mode === "light" ? "#2E2E2E" : "#E3E3E3",
       },
     },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          ":root":
+            mode === "light"
+              ? {
+                  "--scrollbar-track": "#e0e0e0",
+                  "--scrollbar-thumb": "#b0b0b0",
+                  "--scrollbar-hover": "#909090",
+                }
+              : {
+                  "--scrollbar-track": "#2e2e2e",
+                  "--scrollbar-thumb": "#555",
+                  "--scrollbar-hover": "#777",
+                },
+        },
+      },
+    },
   });

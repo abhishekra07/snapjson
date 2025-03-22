@@ -11,6 +11,8 @@ import {
 import { ThemeContext } from "../context/ThemeContext";
 import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+// import logo from "../assets/logo.png"; // Import logo
+import logo from "../assets/logo-2.png"; // Import logo
 
 const Navbar = () => {
   const { themeMode, toggleTheme } = useContext(ThemeContext);
@@ -19,11 +21,25 @@ const Navbar = () => {
     <AppBar position="static" color="primary">
       <Toolbar>
         {/* Left Side - Logo */}
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexGrow: 1,
+            cursor: "pointer",
+          }}
+          component={Link}
+          to="/"
+        >
+          <img
+            src={logo}
+            alt="SnapJSON Logo"
+            style={{ height: 70, width: 150, marginRight: 10 }}
+          />
+          {/* <Typography variant="h6" component="div">
             SnapJSON
-          </Link>
-        </Typography>
+          </Typography> */}
+        </Box>
 
         {/* Right Side - Navigation Links */}
         <Box>
