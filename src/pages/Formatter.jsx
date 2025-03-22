@@ -11,6 +11,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Tooltip,
 } from "@mui/material";
 import { ContentCopy, Download, UploadFile } from "@mui/icons-material";
 
@@ -66,6 +67,24 @@ const Formatter = () => {
     reader.readAsText(file);
   };
 
+  const handleLoadDummyData = () => {
+    const sampleJson = {
+      name: "John Doe",
+      age: 30,
+      email: "johndoe@example.com",
+      address: {
+        street: "123 Main St",
+        city: "New York",
+        zip: "10001",
+      },
+      skills: ["JavaScript", "React", "Node.js"],
+    };
+
+    setJsonInput(JSON.stringify(sampleJson, null, 2));
+    // setFormattedJson(JSON.stringify(sampleJson, null, indentation));
+    setError("");
+  };
+
   return (
     <Box sx={{ p: 3, height: "calc(100vh - 64px)" }}>
       <Grid container spacing={2} alignItems="center" sx={{ height: "100%" }}>
@@ -78,6 +97,7 @@ const Formatter = () => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
+              minHeight: "90vh",
             }}
           >
             <Typography variant="h6">Input JSON</Typography>
@@ -127,6 +147,7 @@ const Formatter = () => {
               variant="contained"
               component="label"
               startIcon={<UploadFile />}
+              sx={{ textTransform: "none" }}
             >
               Upload JSON
               <input
@@ -156,10 +177,22 @@ const Formatter = () => {
             variant="contained"
             color="primary"
             onClick={handleFormatJson}
-            sx={{ height: "50px", width: "100%" }}
+            sx={{ textTransform: "none" }}
           >
-            Format JSON
+            Format
           </Button>
+
+          {/* Load Dummy Data Button with Tooltip */}
+          <Tooltip title="Click to load sample JSON to begin with" arrow>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleLoadDummyData}
+              sx={{ textTransform: "none" }}
+            >
+              Load Example
+            </Button>
+          </Tooltip>
         </Grid>
 
         {/* Right Section - Formatted JSON Output */}
@@ -171,6 +204,7 @@ const Formatter = () => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
+              minHeight: "90vh",
             }}
           >
             <Box display="flex" justifyContent="space-between">

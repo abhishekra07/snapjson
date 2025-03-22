@@ -39,7 +39,7 @@ const FAQ = () => {
   };
 
   return (
-    <Container sx={{ my: 6, textAlign: "center" }}>
+    <Container sx={{ my: 8, textAlign: "center" }}>
       <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold" }}>
         Frequently Asked Questions
       </Typography>
